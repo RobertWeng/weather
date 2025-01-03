@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: weather
+  redis:
+    host: localhost
+    port: 6379
+  cache:
+    type: redis
+server:
+  port: 8080
+app:
+  host:
+    open-meteo:
+      geocoding: https://geocoding-api.open-meteo.com/v1
+      forecast: https://api.open-meteo.com/v1
+      history: https://archive-api.open-meteo.com/v1
