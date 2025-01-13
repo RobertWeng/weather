@@ -19,21 +19,21 @@ public class WebClientConfig {
     @Bean
     public WebClient.Builder webClientBuilder() {
         return WebClient.builder()
-                .filter(logRequest()) // Common logging filter
-                .filter(logResponse()) // Common response logging
+                .filter(logClientRequest())
+                .filter(logClientResponse())
                 .defaultHeader("Content-Type", "application/json");
     }
 
-    // Log request details
-    private ExchangeFilterFunction logRequest() {
+    // Log client (WebService) request details
+    private ExchangeFilterFunction logClientRequest() {
         return ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
             log.info("CLIENT-REQ: {} {}", clientRequest.method(), clientRequest.url());
             return Mono.just(clientRequest);
         });
     }
 
-    // Log response details
-    private ExchangeFilterFunction logResponse() {
+    // Log client (WebService) response details
+    private ExchangeFilterFunction logClientResponse() {
         return ExchangeFilterFunction.ofResponseProcessor(clientResponse -> {
             log.info("CLIENT-RES: {}", clientResponse.statusCode());
             return Mono.just(clientResponse);
