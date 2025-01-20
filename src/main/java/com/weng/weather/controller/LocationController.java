@@ -24,9 +24,7 @@ public class LocationController {
     @Operation(summary = "Search Location", description = "This API is used to retrieve city latitude, longitude and other information")
     @GetMapping("/search")
     public ResponseEntity<LocationRes> searchLocations(@RequestParam String city, @RequestParam String country) {
-        log.info("Test Start");
         LocationRes res = locationService.getLocation(city, country);
-        log.info("Test End");
         return ResponseEntity.ok(res);
     }
 }
