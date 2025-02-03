@@ -3,6 +3,7 @@ package com.weng.weather.exception;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.weng.weather.exception.Error.Code;
+import com.weng.weather.exception.Error.Msg;
 import com.weng.weather.util.MessageUtil;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ public class Catch extends RuntimeException {
     @JsonIgnore
     private HttpStatus httpStatus;
 
-    public Catch(HttpStatus httpStatus, Code code, Error.Msg msg, Object... args) {
+    public Catch(HttpStatus httpStatus, Code code, Msg msg, Object... args) {
         this(httpStatus, code, msg.name(), args);
     }
 
@@ -31,14 +32,18 @@ public class Catch extends RuntimeException {
     }
 
     public static Catch notFound(Object... args) {
-        return new Catch(HttpStatus.NOT_FOUND, Code.NOT_FOUND, Error.Msg.NOT_FOUND, args);
+        return new Catch(HttpStatus.NOT_FOUND, Code.NOT_FOUND, Msg.NOT_FOUND, args);
     }
 
     public static Catch invalidState() {
-        return new Catch(HttpStatus.BAD_REQUEST, Code.INVALID_STATE, Error.Msg.INVALID_STATE);
+        return new Catch(HttpStatus.BAD_REQUEST, Code.INVALID_STATE, Msg.INVALID_STATE);
     }
 
     public static Catch internalServerError(String message, Object... args) {
         return new Catch(HttpStatus.INTERNAL_SERVER_ERROR, Code.INTERNAL_SERVER_ERROR, message, args);
+    }
+
+    public static Catch wsConnectFailed() {
+        return new Catch(HttpStatus.BAD_REQUEST, Code.WS_CONNECT_FAILED, Msg.WS_CONNECT_FAILED);
     }
 }

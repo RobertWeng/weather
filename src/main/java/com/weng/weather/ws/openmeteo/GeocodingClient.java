@@ -1,6 +1,8 @@
 package com.weng.weather.ws.openmeteo;
 
 import com.weng.weather.config.WebClientConfig;
+import com.weng.weather.exception.Catch;
+import com.weng.weather.exception.Error;
 import com.weng.weather.model.dto.external.response.MeteoLocationRes;
 import com.weng.weather.ws.GenericServiceClient;
 import com.weng.weather.ws.ParamsBuilder;
@@ -33,11 +35,11 @@ public class GeocodingClient {
                 .addParam("count", TOTAL_RESULT)
                 .build();
         ResponseEntity<MeteoLocationRes> res = serviceClient.get(baseUrl, "/search", MeteoLocationRes.class, params);
-        if (res.getBody() == null || res.getBody().getResults() == null) throw new RuntimeException();
+        if (res.getBody() == null || res.getBody().getResults() == null) throw Catch.wsConnectFailed();
         return res.getBody().getResults()
                 .stream()
                 .filter(result -> country.equalsIgnoreCase(result.getCountry()))
                 .findFirst()
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> Catch.invalidRequest(Error.Msg.INVALID_COUNTRY));
     }
 }

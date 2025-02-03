@@ -26,7 +26,6 @@ public class ParamsBuilder {
     }
 
     public <T extends WeatherVariable> ParamsBuilder addParam(Set<T> weatherVariable) {
-        if (weatherVariable.isEmpty()) throw new IllegalArgumentException();
         String key = weatherVariable.iterator().next().getParamKey(); // Set key based on WeatherVariable getParamKey: current, daily, hourly
         String value = weatherVariable.stream()
                 .map(WeatherVariable::getParamValue)

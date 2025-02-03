@@ -1,5 +1,8 @@
 package com.weng.weather.ws.openmeteo.constant;
 
+import com.weng.weather.exception.Catch;
+import com.weng.weather.exception.Error;
+
 public class WindDirection {
 
     // Array representing the 8 main compass directions
@@ -11,7 +14,7 @@ public class WindDirection {
     public static String degreeToDirection(int degree) {
         // Validate the input degree
         if (degree < 0 || degree > 360) {
-            throw new IllegalArgumentException("Degree must be between 0 and 360.");
+            throw Catch.invalidRequest(Error.Msg.INVALID_WIND_DIRECTION);
         }
 
         // Divide the degree by 45 to determine its segment

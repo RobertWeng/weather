@@ -1,5 +1,6 @@
 package com.weng.weather.ws;
 
+import com.weng.weather.exception.Catch;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -67,13 +68,13 @@ public class GenericServiceClient {
     }
 
     private <T> ResponseEntity<T> handleResponse(ResponseEntity<T> responseEntity) {
-        if (responseEntity == null) throw new RuntimeException();
-        
+        if (responseEntity == null) throw Catch.wsConnectFailed();
+
         HttpStatusCode statusCode = responseEntity.getStatusCode();
         if (statusCode.is2xxSuccessful()) return responseEntity;
         else {
             log.error("Request failed with status: {} and body: {}", statusCode, responseEntity.getBody());
-            throw new RuntimeException();
+            throw Catch.wsConnectFailed();
         }
     }
 }
