@@ -2,7 +2,6 @@ package com.weng.weather.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -14,11 +13,18 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import java.io.IOException;
 import java.util.UUID;
 
-@WebFilter("/*")
+import static org.springframework.util.StringUtils.hasText;
+
 @Slf4j
 public class RequestLoggingFilter extends OncePerRequestFilter {
 
     public static final String REQUEST_UUID_KEY = "requestUUID";
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return !hasText(path) || path.startsWith("/actuator") || path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs");
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
